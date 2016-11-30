@@ -28,7 +28,7 @@ public interface AnnotationTag {
 	 */
 	static boolean isSettingsBuiltinAssociation(Class<?> clazz){
 		BuiltinAssociation association = clazz.getAnnotation(BuiltinAssociation.class);
-		if(null == association){
+		if(null != association){
 			return true;
 		}
 		return false;

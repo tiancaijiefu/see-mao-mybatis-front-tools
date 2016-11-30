@@ -221,9 +221,9 @@ public class MaoInterceptor extends SeeInterceptor implements Interceptor, Seria
 			List<?> list = (List<?>) object;
 			if(list.size() > 0){
 				Object o = list.get(0);
-				clazz = o.getClass();
-				association = AnnotationTag.isSettingsBuiltinAssociation(clazz);
-				if (association && SeeMetaData.class.isAssignableFrom(clazz)) {
+				Class<?>  clazz_ = o.getClass();
+				association = AnnotationTag.isSettingsBuiltinAssociation(clazz_);
+				if (association && SeeMetaData.class.isAssignableFrom(clazz_)) {
 					object = new MaoProxy().getProxy(list);
 				}
 			}
