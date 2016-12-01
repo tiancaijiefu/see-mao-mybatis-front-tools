@@ -1,5 +1,6 @@
 # see-mao
 
-<font color='blue'>seeframework's mybatis access object</font>
+<span style="color:red;">seeframework's mybatis access object</span>
 
 Thanks to github on the developer yfyang for the pagination plugin
+
