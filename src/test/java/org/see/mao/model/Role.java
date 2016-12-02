@@ -9,31 +9,36 @@ import org.see.mao.ref.model.BaseModel;
 
 /**
  * @author Joshua Wang
- * @date 2016年11月29日
+ * @date 2016年12月2日
  */
-@Table(name="t_org",version=false)
-public class Org extends BaseModel{
+@Table(name="t_role",version=false)
+public class Role extends BaseModel{
 
 	private static final long serialVersionUID = 1L;
-	
-	@Column(name="org_name")
-	private String orgName;
-	
-	@OneToMany(targetEntity=User.class,associateColumnName="org_id")
-	private List<User> users;
 
+	@Column(name="role_name")
+	private String name;
+	
+	@OneToMany(
+			targetEntity=User.class,
+			interTable=true,
+			interTableName="t_user_role",
+			refColumnName="role_id",
+			inverseColumnName="user_id")
+	private List<User> users;
+	
 	/**
-	 * @return the orgName
+	 * @return the name
 	 */
-	public String getOrgName() {
-		return orgName;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @param orgName the orgName to set
+	 * @param name the name to set
 	 */
-	public void setOrgName(String orgName) {
-		this.orgName = orgName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

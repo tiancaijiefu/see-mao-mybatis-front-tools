@@ -16,5 +16,5 @@ public enum FetchType {
     LAZY,
 
     /** Defines that data must be eagerly fetched. */
-    EAGER
+//    EAGER
 }

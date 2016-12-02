@@ -4,10 +4,9 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-import org.see.mao.exception.MaoException;
 import org.see.mao.helpers.AnnotationReflectionHelper;
+import org.see.mao.helpers.sql.dbms.SelectBuilder;
 import org.see.mao.persistence.AnnotationTag;
-import org.see.mao.persistence.Column;
 import org.see.mao.persistence.MetaDataAnnotationConfig;
 import org.see.mao.persistence.SQLBuilderConfig;
 import org.see.mao.persistence.Table;
@@ -173,12 +172,11 @@ public class MaoSQLBuilderHelper {
 			int len = fieldList.size();
 			for (int i = 0; i < len; i++) {
 				Field field = fieldList.get(i);
-				Column column = field.getAnnotation(Column.class);
 				if (i != 0) {
 					sqlBuilder.append(",");
 					valBuilder.append(",");
 				}
-				sqlBuilder.append(column.name());
+				sqlBuilder.append(AnnotationTag.getColumn(field));
 				valBuilder.append("#{entity.").append(field.getName()).append("}");
 			}
 			//version
@@ -214,34 +212,15 @@ public class MaoSQLBuilderHelper {
 			MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
 			// tableName
 			sqlBuilder.append(annotationConfig.getTableName()).append(" set ");
-			// id
-			Field idField = annotationConfig.getIdField();
-			if(null != annotationConfig.getIdField()){
-				Object id = null;
-				boolean isAccess = idField.isAccessible();
-				if(!isAccess){
-					idField.setAccessible(true);
-					try {
-						id = idField.get(object);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				if(null == id){
-					throw new MaoException("修改"+clazz+"出错，id为null或0！");
-				}
-				idField.setAccessible(isAccess);
-			}
 			// columns
 			List<Field> fieldList = annotationConfig.getColumnFields();
 			int len = fieldList.size();
 			for (int i = 0; i < len; i++) {
 				Field field = fieldList.get(i);
-				Column column = field.getAnnotation(Column.class);
 				if (i != 0) {
 					sqlBuilder.append(",");
 				}
-				sqlBuilder.append(column.name()).append("=#{entity.").append(field.getName()).append("}");
+				sqlBuilder.append(AnnotationTag.getColumn(field)).append("=#{entity.").append(field.getName()).append("}");
 			}
 			//version
 			boolean isVersion = annotationConfig.isVersion();
@@ -266,50 +245,16 @@ public class MaoSQLBuilderHelper {
 	 */
 	public synchronized static String builderAutoQuerySql(Class<?> clazz) {
 		SQLBuilderConfig sqlConfig = sqlCache.get(clazz);
-		String sql = sqlConfig!=null?sqlConfig.getAutoQueryOneSql():null;
+		if(null == sqlConfig){
+			sqlConfig = new SQLBuilderConfig();
+		}
+		String sql = sqlConfig.getAutoQueryOneSql();
 		if (sql == null) {
-			sqlConfig = sqlConfig!=null?sqlConfig:new SQLBuilderConfig();
-			MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
-			String table  = annotationConfig.getTableName();
-			String table_ = table+"_";
-			boolean isVersion = annotationConfig.isVersion();
-			StringBuilder sqlBuilder = new StringBuilder("select ").append(getColRegix(table_,"id")).append(",");
-			// columns
-			List<Field> fieldList = annotationConfig.getColumnFields();
-			int len = fieldList.size();
-			for (int i = 0; i < len; i++) {
-				if(i != 0){
-					sqlBuilder.append(",");
-				}
-				Field field = fieldList.get(i);
-				Column column = field.getAnnotation(Column.class);
-				//column and alias
-				sqlBuilder.append(getColRegix(table_,column.name(),field.getName()));
-			}
-			if(isVersion){
-				sqlBuilder.append("," + getColRegix(table_,createUser,"createUser"));
-				sqlBuilder.append("," + getColRegix(table_,createTime,"createTime"));
-				sqlBuilder.append("," + getColRegix(table_,updateUser,"updateUser"));
-				sqlBuilder.append("," + getColRegix(table_,updateTime,"updateTime"));
-			}
-			sqlBuilder.append(" from ").append(table).append(" "+table_);
-			sqlBuilder.append(" where ").append(getColRegix(table_,"id")).append("=#{id}");
-			sql = sqlBuilder.toString();
+			sql = SelectBuilder.getUseIdSelectSql(clazz);
 			sqlConfig.setAutoQueryOneSql(sql);
 			sqlCache.put(clazz, sqlConfig);
 		}
 		return sql;
-	}
-	
-	private static String getColRegix(String regix,String ... columns){
-		int len = columns.length;
-		if(len == 1){
-			return regix+"."+columns[0];
-		}
-		if(len == 2){
-			return regix+"."+columns[0]+" "+columns[1];
-		}
-		return null;
 	}
 	
 }

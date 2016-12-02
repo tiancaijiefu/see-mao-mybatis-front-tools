@@ -1,8 +1,10 @@
 package org.see.mao;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
@@ -13,12 +15,13 @@ import org.see.mao.dto.SeePaginationList;
 import org.see.mao.dto.datatables.PagingCriteria;
 import org.see.mao.helpers.ConvertHelper;
 import org.see.mao.helpers.proxy.MaoProxy;
+import org.see.mao.helpers.reflex.Reflections;
 import org.see.mao.mapper.BaseMapper;
-import org.see.mao.mapper.MenuMapper;
 import org.see.mao.mapper.OrgMapper;
+import org.see.mao.mapper.RoleMapper;
 import org.see.mao.mapper.UserMapper;
-import org.see.mao.model.MenuTree;
 import org.see.mao.model.Org;
+import org.see.mao.model.Role;
 import org.see.mao.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -43,10 +46,10 @@ public class AppTest extends TestCase {
 	UserMapper userMapper;
 	
 	@Autowired
-	MenuMapper menuMapper;
+	OrgMapper orgMapper;
 	
 	@Autowired
-	OrgMapper orgMapper;
+	RoleMapper roleMapper;
 	
 	@Autowired
 	UserService userService;
@@ -61,7 +64,7 @@ public class AppTest extends TestCase {
 		
 //		List<User> userLst = ConvertHelper.convert(menuMapper.getMapList(null, sql), User.class);
 		
-		User user = ConvertHelper.convert(menuMapper.getMap(6, sql), User.class);
+		User user = ConvertHelper.convert(userMapper.getMap(6, sql), User.class);
 		
 		System.out.println(user);
 	}
@@ -80,18 +83,19 @@ public class AppTest extends TestCase {
 	@Test
 	public void pageList(){
 		
-		MenuTree menuTree = new MenuTree();
-		
-		PagingCriteria pc = menuTree.getPagingCriteria();
-		
-		menuTree.getSeeListBean().setPageNo(3);
-		
-		
-		String sql = "select id,menu_name name,menu_url url,icon_skin icon from wp_menu";
-		
-		SeePaginationList<MenuTree> list = menuMapper.listByPage(menuTree.getPagingCriteria(), menuTree, sql);
-		
-		System.err.println(list.get(0).getOrg());
+//		MenuTree menuTree = new MenuTree();
+//		
+//		PagingCriteria pc = menuTree.getPagingCriteria();
+//		
+//		menuTree.getSeeListBean().setPageNo(3);
+//		
+//		
+//		String sql = "select id,menu_name name,menu_url url,icon_skin icon from wp_menu";
+//		
+//		SeePaginationList<MenuTree> list = menuMapper.listByPage(menuTree.getPagingCriteria(), menuTree, sql);
+//		
+//		System.err.println(list.get(0).getOrg());
+//		System.err.println(list.get(1).getOrg());
 		
 	}
 	
@@ -137,9 +141,10 @@ public class AppTest extends TestCase {
 	@Rollback(false)
 	public void testAutoSave(){
 		User user = new User();
-		user.setId(114L);
-		user.setName("Version4");
+		user.setId(20315L);
+		user.setName("TestOrg");
 		user.setAge(24);
+		user.setOrgId(1L);
 		user.iniParamBeforeInsert();
 		userMapper.save(user);
 	}
@@ -222,6 +227,44 @@ public class AppTest extends TestCase {
 		System.out.println(user);
 	}
 	
+	
+	@Test
+	public void testAutoGetOneToOne(){
+		
+		User user = userMapper.get(User.class, 20313);
+		
+		System.out.println(user.getOrg().getOrgName());
+		
+	}
+	
+	
+	@Test
+	public void testAutoGetOneToMany1(){
+		
+		Org org  = orgMapper.get(Org.class, 1L);
+		
+		System.out.println(org.getUsers());
+		
+	}
+	
+	@Test
+	public void testAutoGetOneToMany2(){
+		
+		Role role = roleMapper.get(Role.class, 1L);
+		
+		System.out.println(role.getUsers().get(0).getOrg().getOrgName());
+		
+	}
+	
+	@Test
+	@Rollback(false)
+	public void testAutoUpdate(){
+		User user = userMapper.get(User.class, 20313L);
+		user.setName("测试姓名2");
+		int count = userMapper.update(user);
+		System.err.println("count : ["+count+"]");
+	}
+	
 	@Test
 	@Rollback(false)
 	public void testUpdate(){
@@ -245,6 +288,19 @@ public class AppTest extends TestCase {
 		
 		
 		System.err.println("count : ["+count+"]");
+	}
+	
+	@Test
+	public void testProxy(){
+		
+		User user = new User();
+		user.setId(1L);
+		user.setName("Joshua");
+		
+		user = new MaoProxy().getProxy(user);
+		
+		System.out.println(Reflections.getUserClass(user.getClass()));
+		
 	}
 	
 }

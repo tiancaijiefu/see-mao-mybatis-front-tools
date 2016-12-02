@@ -1,7 +1,3 @@
-/*
- * Copyright © 2012-2013 mumu@yfyang. All Rights Reserved.
- */
-
 package org.see.mao.helpers.sql;
 
 import java.util.regex.Matcher;
@@ -16,8 +12,6 @@ import com.google.common.base.Preconditions;
  * </p>
  *
  * @author poplar.yfyang
- * @version 1.0 2013-01-02 12:37 PM
- * @since JDK 1.5
  */
 public class SqlRemoveHelper {
 

@@ -1,13 +1,13 @@
 package org.see.mao.mapper;
 
-import org.see.mao.model.MenuTree;
+import org.see.mao.model.Role;
 import org.see.mao.persistence.MaoRepository;
 
 /**
  * @author Joshua Wang
- * @date 2016年11月23日
+ * @date 2016年12月2日
  */
 @MaoRepository
-public interface MenuMapper extends BaseMapper<MenuTree>{
+public interface RoleMapper extends BaseMapper<Role> {
 
 }

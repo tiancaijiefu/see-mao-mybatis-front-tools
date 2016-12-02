@@ -1,0 +1,45 @@
+package org.see.mao.helpers.proxy;
+
+import java.util.List;
+
+import org.see.mao.dto.SeeMetaData;
+import org.see.mao.helpers.AnnotationReflectionHelper;
+import org.see.mao.persistence.MetaDataAnnotationConfig;
+
+/**
+ * @author Joshua Wang
+ * @date 2016年12月2日
+ */
+public class ProxyHelper {
+
+	/**
+	 * 根据对象生成代理对象
+	 * @param object
+	 * @return
+	 */
+	public static Object proxy(Object object){
+		Class<?> clazz = object.getClass();
+		MetaDataAnnotationConfig config = null;//AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		if (SeeMetaData.class.isAssignableFrom(object.getClass())) {
+			config = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+			if(config.isAssociate()){
+				object = new MaoProxy().getProxy((SeeMetaData)object);
+			}
+		}
+		if(List.class.isAssignableFrom(clazz)){
+			List<?> list = (List<?>) object;
+			if(list.size() > 0){
+				Object o = list.get(0);
+				Class<?>  clazz_ = o.getClass();
+				if (SeeMetaData.class.isAssignableFrom(clazz_)) {
+					config = AnnotationReflectionHelper.getAnnotationConfig(clazz_);
+					if(config.isAssociate()){
+						object = new MaoProxy().getProxy(list);
+					}
+				}
+			}
+		}
+		return object;
+	}
+
+}

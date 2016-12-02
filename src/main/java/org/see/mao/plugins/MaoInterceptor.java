@@ -3,7 +3,6 @@ package org.see.mao.plugins;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.ibatis.executor.Executor;
@@ -22,8 +21,7 @@ import org.see.mao.dto.SeeMetaData;
 import org.see.mao.dto.SeePaginationList;
 import org.see.mao.dto.datatables.PagingCriteria;
 import org.see.mao.helpers.CountHelper;
-import org.see.mao.helpers.proxy.MaoProxy;
-import org.see.mao.persistence.AnnotationTag;
+import org.see.mao.helpers.proxy.ProxyHelper;
 
 /**
  * @author Joshua Wang
@@ -199,36 +197,12 @@ public class MaoInterceptor extends SeeInterceptor implements Interceptor, Seria
 		if(!isInvoke){
 			object = invocation.proceed();
 		}
+		
 		if(object != null){
-			object = proxy(object);
+			object = ProxyHelper.proxy(object);
 		}
 		//拦截 关键字ByPage、update、save、delete关键字外的所有其他方法
 		return object;//allProcessIntercept(invocation);
-	}
-	
-	/**
-	 * 根据对象生成代理对象
-	 * @param object
-	 * @return
-	 */
-	private static Object proxy(Object object){
-		Class<?> clazz = object.getClass();
-		boolean association = AnnotationTag.isSettingsBuiltinAssociation(clazz);
-		if (SeeMetaData.class.isAssignableFrom(object.getClass()) && association) {
-			object = new MaoProxy().getProxy((SeeMetaData)object);
-		}
-		if(List.class.isAssignableFrom(clazz)){
-			List<?> list = (List<?>) object;
-			if(list.size() > 0){
-				Object o = list.get(0);
-				Class<?>  clazz_ = o.getClass();
-				association = AnnotationTag.isSettingsBuiltinAssociation(clazz_);
-				if (association && SeeMetaData.class.isAssignableFrom(clazz_)) {
-					object = new MaoProxy().getProxy(list);
-				}
-			}
-		}
-		return object;
 	}
 	
 	/* (non-Javadoc)

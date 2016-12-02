@@ -1,12 +1,6 @@
 package org.see.mao.model;
 
-import java.util.List;
-
-import org.see.mao.persistence.BuiltinAssociation;
 import org.see.mao.persistence.Column;
-import org.see.mao.persistence.FetchType;
-import org.see.mao.persistence.JoinColumn;
-import org.see.mao.persistence.OneToMany;
 import org.see.mao.persistence.OneToOne;
 import org.see.mao.persistence.Table;
 import org.see.mao.ref.model.BaseModel;
@@ -15,27 +9,27 @@ import org.see.mao.ref.model.BaseModel;
  * @author Joshua Wang
  * @date 2016年11月17日
  */
-@Table(name="t_user",version=true)
-@BuiltinAssociation
+@Table(name = "t_user", version = true)
 public class User extends BaseModel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long major;
-	
-	@Column(name="age")
+
+	@Column(name = "age")
 	private int age;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	private String name;
 	
-	@JoinColumn(name="org_id",targetEntity=Org.class,fetch=FetchType.LAZY)
+	@Column(name="org_id")
+	private Long orgId;
+
+	@OneToOne(mappedBy="orgId",targetEntity=Org.class)
 	private Org org;
-	
-	private List<MenuTree> trees;
 
 	/**
 	 * @return the name
@@ -85,41 +79,38 @@ public class User extends BaseModel {
 	/**
 	 * @return the org
 	 */
-	@OneToOne(mappedBy="org_id",targetEntity=Org.class)
 	public Org getOrg() {
 		return org;
 	}
 
 	/**
-	 * @param org the org to set
+	 * @param org
+	 *            the org to set
 	 */
 	public void setOrg(Org org) {
 		this.org = org;
 	}
 
 	/**
-	 * @return the trees
+	 * @return the orgId
 	 */
-	@OneToMany(mappedBy="test_id",targetEntity=MenuTree.class)
-	public List<MenuTree> getTrees() {
-		return trees;
+	public Long getOrgId() {
+		return orgId;
 	}
 
 	/**
-	 * @param trees the trees to set
+	 * @param orgId the orgId to set
 	 */
-	public void setTrees(List<MenuTree> trees) {
-		this.trees = trees;
+	public void setOrgId(Long orgId) {
+		this.orgId = orgId;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "User [major=" + major + ", name=" + getName() + ", id=" + getId() + "]";
+		return "User [id=" + getId() + ", age=" + age + ", name=" + name + ", orgId=" + orgId + ", org=" + org + "]";
 	}
 
 }

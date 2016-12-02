@@ -1,11 +1,22 @@
 package org.see.mao.helpers.proxy;
 
+import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import org.see.common.spring.SpringContextHolder;
 import org.see.mao.dto.SeeMetaData;
 import org.see.mao.exception.MaoException;
+import org.see.mao.helpers.AnnotationReflectionHelper;
+import org.see.mao.helpers.ConvertHelper;
+import org.see.mao.helpers.reflex.Reflections;
+import org.see.mao.helpers.sql.MaoSQLBuilderHelper;
+import org.see.mao.helpers.sql.dbms.SelectBuilder;
+import org.see.mao.mapper.CustomMapper;
+import org.see.mao.persistence.AnnotationTag;
+import org.see.mao.persistence.MetaDataAnnotationConfig;
 import org.see.mao.persistence.OneToMany;
 import org.see.mao.persistence.OneToOne;
 import org.springframework.util.ConcurrentReferenceHashMap;
@@ -33,22 +44,26 @@ public class MaoProxy implements MethodInterceptor {
 	private final static int ADVICE = 1;
 	/**cache the Enhancer's instance*/
 	private static final Map<Class<?>, Enhancer> proxCache = new ConcurrentReferenceHashMap<Class<?>, Enhancer>(256);
+	/**mapper*/
+	private static final CustomMapper mapper = SpringContextHolder.getBean(CustomMapper.class);
 	
 	public <T> T getProxy(SeeMetaData metaData){
 		if(metaData == null){
 			throw new MaoException("生成代理出错！");
 		}
-		this.targetClass = metaData.getClass();
+		targetClass = metaData.getClass();
 		Enhancer enhancer = proxCache.get(targetClass);
 		if(enhancer == null){
+			MetaDataAnnotationConfig config = AnnotationReflectionHelper.getAnnotationConfig(targetClass);
+			List<String> associateGetNames = Lists.newArrayList(config.getAssociateGetNames());
 			enhancer = new Enhancer();
 			enhancer.setSuperclass(this.targetClass);
 			enhancer.setCallbackFilter(new CallbackFilter() {
 				@Override
 				public int accept(Method method) {
-					OneToOne oneToOne = method.getAnnotation(OneToOne.class);
-					OneToMany oneToMany = method.getAnnotation(OneToMany.class);
-					if(oneToOne != null || oneToMany != null){
+					String name = method.getName();
+					if(associateGetNames.contains(name)){
+						associateGetNames.remove(name);
 						return LAZY_LOADER;
 					}
 					return ADVICE;
@@ -80,16 +95,63 @@ public class MaoProxy implements MethodInterceptor {
 		return result;
 	}
 	
-
 	@Override
 	public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-		Object result = null;
-		
-        result = proxy.invokeSuper(obj, args);
-        
-        System.out.println(obj+"===================2222222========================="+method);
-        
-        return result;
+        return proceed(obj,method);
 	}
+	
+	public static Object proceed(Object object,Method method){
+		//执行返回
+		Object result = null;
+		Class<?> clazz = Reflections.getUserClass(object.getClass());
+		MetaDataAnnotationConfig config = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		Field field = config.searchAssociateField(method);
+		
+		OneToOne  oneToOne  = field.getAnnotation(OneToOne.class);
+		OneToMany oneToMany = field.getAnnotation(OneToMany.class);
+		if(oneToOne == null && oneToMany == null){
+			throw new MaoException(clazz+"的"+field.getName()+"没有设置 @OneToOne 或  @OneToMany");
+		}
+		if(oneToOne != null && oneToMany != null){
+			throw new MaoException(clazz+"的"+field.getName()+"同时设置了 @OneToOne 和 @OneToMany");
+		}
 
+		//操作的目标类型
+		Class<?> targetClass = null;
+		if(oneToOne != null){
+			targetClass = oneToOne.targetEntity();
+			String mappedFileGetMethodName = AnnotationTag.getMethodName(oneToOne.mappedBy());
+			Serializable id = (Serializable) Reflections.invokeMethod(object, mappedFileGetMethodName, null, null);
+			String sql = MaoSQLBuilderHelper.builderAutoQuerySql(targetClass);
+			result = ConvertHelper.convert(mapper.getMap(id, sql), targetClass);
+		}
+		
+		if(oneToMany != null){
+			targetClass = oneToMany.targetEntity();
+			boolean inter = oneToMany.interTable();
+			Serializable id = (Serializable) Reflections.invokeMethod(object, "getId", null, null);
+			String sql = null;
+			if(inter){//中间表
+				String interTableName = oneToMany.interTableName();
+				String refColumnName = oneToMany.refColumnName();
+				String inverseColumnName = oneToMany.inverseColumnName();
+				// select * from user u where u.id in(select user_id from t_user_role where role_id=#{id})
+				// TODO 后续优化为exists
+				String columnsStr = SelectBuilder.getColumnsStr(targetClass);
+				StringBuilder sqlBuilder = new StringBuilder("select id,");
+				sqlBuilder.append(columnsStr);
+				sqlBuilder.append(" from ").append(AnnotationTag.getTable(targetClass).name());
+				sqlBuilder.append(" where id in (");
+				sqlBuilder.append("select "+inverseColumnName+" from "+interTableName+" where "+refColumnName+"=#{id}");
+				sqlBuilder.append(")");
+				sql = sqlBuilder.toString();
+			}else{//无中间表
+				String associateColumn = oneToMany.associateColumnName();
+				sql = SelectBuilder.getUserWhereColumnSelectSql(targetClass, associateColumn);
+			}
+			result = ConvertHelper.convert(mapper.getMapsByParam(id, sql), targetClass);
+		}
+		return ProxyHelper.proxy(result);
+	}
+	
 }

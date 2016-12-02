@@ -1,4 +1,5 @@
 package org.see.mao.commons;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.junit.Test;
@@ -19,6 +20,12 @@ public class CommonTestUtil {
 	@Test
 	public void testBatch(){
 		
+		Field[] fs = User.class.getDeclaredFields();
+		for(Field f : fs){
+			if(List.class.equals(f.getType())){
+				System.out.println(f);
+			}
+		}
 		
 	}
 
