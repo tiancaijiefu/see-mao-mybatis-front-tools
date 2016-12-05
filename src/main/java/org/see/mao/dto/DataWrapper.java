@@ -8,14 +8,14 @@ import java.util.List;
  */
 public class DataWrapper {
 
-	private MetaData seeMetaData;
+	private SeeMetaData seeMetaData;
 
-	private List<MetaData> seeMetaDataList;
+	private List<SeeMetaData> seeMetaDataList;
 
 	/**
 	 * @return the seeMetaData
 	 */
-	public MetaData getSeeMetaData() {
+	public SeeMetaData getSeeMetaData() {
 		return seeMetaData;
 	}
 
@@ -23,14 +23,14 @@ public class DataWrapper {
 	 * @param seeMetaData
 	 *            the seeMetaData to set
 	 */
-	public void setSeeMetaData(MetaData seeMetaData) {
+	public void setSeeMetaData(SeeMetaData seeMetaData) {
 		this.seeMetaData = seeMetaData;
 	}
 
 	/**
 	 * @return the seeMetaDataList
 	 */
-	public List<MetaData> getSeeMetaDataList() {
+	public List<SeeMetaData> getSeeMetaDataList() {
 		return seeMetaDataList;
 	}
 
@@ -38,7 +38,7 @@ public class DataWrapper {
 	 * @param seeMetaDataList
 	 *            the seeMetaDataList to set
 	 */
-	public void setSeeMetaDataList(List<MetaData> seeMetaDataList) {
+	public void setSeeMetaDataList(List<SeeMetaData> seeMetaDataList) {
 		this.seeMetaDataList = seeMetaDataList;
 	}
 

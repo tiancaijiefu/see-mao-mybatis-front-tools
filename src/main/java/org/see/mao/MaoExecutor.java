@@ -22,7 +22,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
 import org.see.mao.dto.PageArrayList;
-import org.see.mao.dto.PaginationList;
+import org.see.mao.dto.SeePaginationList;
 import org.see.mao.plugins.MaoInterceptor;
 
 
@@ -87,11 +87,11 @@ public class MaoExecutor implements Executor {
         try {
         	if(interceptor){
         		if (total != 0) {
-        			final PaginationList<E> result = new PaginationList<E>(rows, MaoInterceptor.getPageRequest(), total);
+        			final SeePaginationList<E> result = new SeePaginationList<E>(rows, MaoInterceptor.getPageRequest(), total);
         			doCache(ms, result, parameter, rowBounds);
         			return result;
         		} else {
-        			return new PaginationList<E>(rows);
+        			return new SeePaginationList<E>(rows);
         		}
         	}
         	return rows;

@@ -20,7 +20,7 @@ import org.see.mao.common.sql.SqlRemoveHelper;
 import org.see.mao.dialect.DBMS;
 import org.see.mao.dialect.Dialect;
 import org.see.mao.dialect.DialectClient;
-import org.see.mao.dto.MetaData;
+import org.see.mao.dto.SeeMetaData;
 import org.see.mao.dto.DataWrapper;
 import org.see.mao.dto.datatables.PagingCriteria;
 import org.see.mao.dto.datatables.SearchField;
@@ -193,9 +193,9 @@ public abstract class CustomerPluginSuper {
 	protected static DataWrapper getRequestSeeWrapper(Object[] invocationArgs) {
 		Object parameter = invocationArgs[1];
 		DataWrapper seeWrapper = new DataWrapper();
-		MetaData seeMetaData = null;
-		if (MetaData.class.isAssignableFrom(parameter.getClass())) {
-			seeMetaData = (MetaData) parameter;
+		SeeMetaData seeMetaData = null;
+		if (SeeMetaData.class.isAssignableFrom(parameter.getClass())) {
+			seeMetaData = (SeeMetaData) parameter;
 			seeWrapper.setSeeMetaData(seeMetaData);
 		} else if(Map.class.isAssignableFrom(parameter.getClass())) {
 			Map<String, Object> paramMap = (Map<String, Object>) parameter;
@@ -206,13 +206,13 @@ public abstract class CustomerPluginSuper {
 					if(val == null){
 						continue;
 					}
-					if (MetaData.class.isAssignableFrom(val.getClass())) {
-						seeMetaData = (MetaData) val;
+					if (SeeMetaData.class.isAssignableFrom(val.getClass())) {
+						seeMetaData = (SeeMetaData) val;
 						seeWrapper.setSeeMetaData(seeMetaData);
 						break;
 					}
 					if(List.class.isAssignableFrom(val.getClass())){
-						seeWrapper.setSeeMetaDataList((List<MetaData>)val);
+						seeWrapper.setSeeMetaDataList((List<SeeMetaData>)val);
 						break;
 					}
 				}

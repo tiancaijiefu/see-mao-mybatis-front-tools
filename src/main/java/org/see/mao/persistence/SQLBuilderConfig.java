@@ -38,6 +38,11 @@ public class SQLBuilderConfig {
 	private String autoQueryOneSql;
 
 	/**
+	 * MAO自动生成查询SQL -> OneToOne
+	 */
+	private String autoQueryOneToOneSql;
+
+	/**
 	 * MAO自动生成查询SQL
 	 */
 	private String customQueryOneSql;
@@ -160,6 +165,21 @@ public class SQLBuilderConfig {
 	 */
 	public void setCustomQueryOneSql(String customQueryOneSql) {
 		this.customQueryOneSql = customQueryOneSql;
+	}
+
+	/**
+	 * @return the autoQueryOneToOneSql
+	 */
+	public String getAutoQueryOneToOneSql() {
+		return autoQueryOneToOneSql;
+	}
+
+	/**
+	 * @param autoQueryOneToOneSql
+	 *            the autoQueryOneToOneSql to set
+	 */
+	public void setAutoQueryOneToOneSql(String autoQueryOneToOneSql) {
+		this.autoQueryOneToOneSql = autoQueryOneToOneSql;
 	}
 
 }

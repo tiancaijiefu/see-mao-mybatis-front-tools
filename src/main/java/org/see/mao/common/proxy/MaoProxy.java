@@ -12,7 +12,7 @@ import org.see.mao.common.reflex.AnnotationReflections;
 import org.see.mao.common.reflex.Reflections;
 import org.see.mao.common.sql.SQLBuilderHelper;
 import org.see.mao.common.sql.build.SelectBuilder;
-import org.see.mao.dto.MetaData;
+import org.see.mao.dto.SeeMetaData;
 import org.see.mao.exception.MaoException;
 import org.see.mao.mapper.CustomMapper;
 import org.see.mao.persistence.AnnotationTag;
@@ -47,7 +47,7 @@ public class MaoProxy implements MethodInterceptor {
 	/**mapper*/
 	private static final CustomMapper mapper = SpringContextHolder.getBean(CustomMapper.class);
 	
-	public <T> T getProxy(MetaData metaData){
+	public <T> T getProxy(SeeMetaData metaData){
 		if(metaData == null){
 			throw new MaoException("生成代理出错！");
 		}
@@ -89,7 +89,7 @@ public class MaoProxy implements MethodInterceptor {
 		}
 		List<T> result = Lists.newArrayList();
 		for(T entity : list){
-			Object o = getProxy((MetaData)entity);
+			Object o = getProxy((SeeMetaData)entity);
 			result.add((T) o);
 		}
 		return result;
@@ -121,8 +121,10 @@ public class MaoProxy implements MethodInterceptor {
 		if(oneToOne != null){
 			targetClass = oneToOne.targetEntity();
 			String mappedFileGetMethodName = AnnotationTag.getMethodName(oneToOne.mappedBy());
+			
 			Serializable id = (Serializable) Reflections.invokeMethod(object, mappedFileGetMethodName, null, null);
-			String sql = SQLBuilderHelper.builderAutoQuerySql(targetClass);
+			
+			String sql = SQLBuilderHelper.builderAutoQueryOneToOneSql(targetClass, oneToOne);
 			result = ConvertHelper.convert(mapper.getMap(id, sql), targetClass);
 		}
 		

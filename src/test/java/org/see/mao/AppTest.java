@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.see.mao.common.ConvertHelper;
 import org.see.mao.common.proxy.MaoProxy;
 import org.see.mao.common.reflex.Reflections;
-import org.see.mao.dto.PaginationList;
+import org.see.mao.dto.SeePaginationList;
 import org.see.mao.dto.datatables.PagingCriteria;
 import org.see.mao.mapper.MenuMapper;
 import org.see.mao.mapper.OrgMapper;
@@ -92,7 +92,7 @@ public class AppTest extends TestCase {
 		
 		String sql = "select id,menu_name name,menu_url url,icon_skin icon from wp_menu";
 		
-		PaginationList<MenuTree> list = menuMapper.listByPage(menuTree.getPagingCriteria(), menuTree, sql);
+		SeePaginationList<MenuTree> list = menuMapper.listByPage(menuTree.getPagingCriteria(), menuTree, sql);
 		
 		System.err.println(list);
 		
@@ -242,7 +242,7 @@ public class AppTest extends TestCase {
 		
 		Org org  = orgMapper.get(Org.class, 1L);
 		
-		System.out.println(org.getUsers());
+		System.out.println(org);
 		
 	}
 	

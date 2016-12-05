@@ -10,7 +10,7 @@ import org.see.mao.dto.datatables.PagingCriteria;
  * @param <E>
  * @date 2016年7月20日
  */
-public class PaginationList<E> extends PageArrayList<E> {
+public class SeePaginationList<E> extends PageArrayList<E> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -126,7 +126,7 @@ public class PaginationList<E> extends PageArrayList<E> {
      * @param pageable the pageable
      * @param total    the total
 	 */
-	public PaginationList(Collection<? extends E> content, PagingCriteria pageable, long total) {
+	public SeePaginationList(Collection<? extends E> content, PagingCriteria pageable, long total) {
 		super(content, pageable, total);
 		this.pageNo = pageable.getPageNumber();
 		this.pageSize = pageable.getDisplaySize();
@@ -137,21 +137,21 @@ public class PaginationList<E> extends PageArrayList<E> {
      * Instantiates a new Page my batis.
      * @param content the content
 	 */
-	public PaginationList(List<E> content) {
+	public SeePaginationList(List<E> content) {
 		super(content);
 	}
 	
 	/**
 	 * Instantiates a new Page my batis no Parameteres
 	 */
-	public PaginationList(){
+	public SeePaginationList(){
 		super();
 	}
 	
 	/**
 	 * Instantiates a new Page my batis no Parameteres
 	 */
-	public PaginationList(int pageSize){
+	public SeePaginationList(int pageSize){
 		super();
 		this.pageSize = pageSize;
 	}

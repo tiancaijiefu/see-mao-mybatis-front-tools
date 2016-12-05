@@ -30,4 +30,11 @@ public @interface OneToOne {
      */
 	Class<?> targetEntity();
 	
+	
+	/**
+     * 关联数据库表中字段名称
+     * 		如果不设置，那么默认关联另一数据库表的id
+	 */
+	String inverseColumnName() default "";
+	
 }

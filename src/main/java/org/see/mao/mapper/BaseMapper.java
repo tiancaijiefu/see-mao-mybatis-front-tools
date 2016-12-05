@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.see.mao.common.sql.SQLProvider;
-import org.see.mao.dto.MetaData;
-import org.see.mao.dto.PaginationList;
+import org.see.mao.dto.SeeMetaData;
+import org.see.mao.dto.SeePaginationList;
 import org.see.mao.dto.datatables.PagingCriteria;
 
 /**
@@ -79,7 +79,7 @@ public interface BaseMapper<T> extends MapperConfiguration {
 	 * @return
 	 */
 	@SelectProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
-	PaginationList<T> listByPage(PagingCriteria pagingCriteria,@Param("entity") T entity, @Param("sql") String sql);
+	SeePaginationList<T> listByPage(PagingCriteria pagingCriteria,@Param("entity") T entity, @Param("sql") String sql);
 	
 	/**
 	 * 保存对象
@@ -197,7 +197,7 @@ public interface BaseMapper<T> extends MapperConfiguration {
 	 * @return java.util.List<Map<String,String>;
 	 */
 	@SelectProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
-	public Map<String,String> getMapByEntity(@Param("entity") MetaData entity, @Param("sql") String sql);
+	public Map<String,String> getMapByEntity(@Param("entity") SeeMetaData entity, @Param("sql") String sql);
 	
 	/**
 	 * 根据entity查询结果集（Map）
@@ -206,6 +206,6 @@ public interface BaseMapper<T> extends MapperConfiguration {
 	 * @return	java.util.List<Map<String,String>;
 	 */
 	@SelectProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
-	public List<Map<String,String>> getMapsByEntity(@Param("entity") MetaData entity, @Param("sql") String sql);
+	public List<Map<String,String>> getMapsByEntity(@Param("entity") SeeMetaData entity, @Param("sql") String sql);
 	
 }

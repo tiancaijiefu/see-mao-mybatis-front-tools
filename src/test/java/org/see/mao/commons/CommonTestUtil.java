@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.Test;
 import org.see.mao.common.proxy.MaoProxy;
 import org.see.mao.common.sql.SQLBuilderHelper;
-import org.see.mao.dto.MetaData;
+import org.see.mao.dto.SeeMetaData;
 import org.see.mao.model.User;
 
 import com.google.common.collect.Lists;
@@ -146,7 +146,7 @@ public class CommonTestUtil {
 	@Test
 	public void testInstance(){
 		User user = new User();
-		boolean flag = MetaData.class.isAssignableFrom(user.getClass());
+		boolean flag = SeeMetaData.class.isAssignableFrom(user.getClass());
 		System.out.println(flag);
 	}
 	

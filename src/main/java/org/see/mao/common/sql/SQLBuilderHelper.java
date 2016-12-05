@@ -8,6 +8,7 @@ import org.see.mao.common.reflex.AnnotationReflections;
 import org.see.mao.common.sql.build.SelectBuilder;
 import org.see.mao.persistence.AnnotationTag;
 import org.see.mao.persistence.MetaDataAnnotationConfig;
+import org.see.mao.persistence.OneToOne;
 import org.see.mao.persistence.SQLBuilderConfig;
 import org.see.mao.persistence.Table;
 import org.see.mao.persistence.VersionConfig;
@@ -49,10 +50,10 @@ public class SQLBuilderHelper {
 			// 定义新SQL
 			StringBuilder sqlBuilder = new StringBuilder(prefixSql);
 			if (!prefixSql.toLowerCase().matches(".*," + updateTime + ".*") && !prefixSql.toLowerCase().matches(".* " + updateTime + ".*")) {
-				sqlBuilder.append("," + updateTime + "=").append("#{updateTime}");
+				sqlBuilder.append("," + updateTime + "=").append("#{update_date}");
 			}
 			if (!prefixSql.toLowerCase().matches(".*," + updateUser + ".*") && !prefixSql.toLowerCase().matches(".* " + updateUser + ".*")) {
-				sqlBuilder.append("," + updateUser + "=").append("#{updateUser}");
+				sqlBuilder.append("," + updateUser + "=").append("#{update_user}");
 			}
 			sqlBuilder.append(" where ").append(suffixSql);
 			sqlBuilder.append(" and " + updateTime + "=").append("#{version}");
@@ -112,16 +113,16 @@ public class SQLBuilderHelper {
 			// values
 			suffixBuilder.append(suffixSql);
 			if (update_date_flag) {
-				suffixBuilder.append(",#{updateTime}");
+				suffixBuilder.append(",#{update_date}");
 			}
 			if (update_user_flag) {
-				suffixBuilder.append(",#{updateUser}");
+				suffixBuilder.append(",#{update_user}");
 			}
 			if (create_date_flag) {
-				suffixBuilder.append(",#{createTime}");
+				suffixBuilder.append(",#{create_date}");
 			}
 			if (create_user_flag) {
-				suffixBuilder.append(",#{createUser}");
+				suffixBuilder.append(",#{create_user}");
 			}
 			suffixBuilder.append(")");
 			prefixBuilder.append(suffixBuilder);
@@ -183,7 +184,7 @@ public class SQLBuilderHelper {
 			boolean isVersion = annotationConfig.isVersion();
 			if (isVersion) {
 				sqlBuilder.append("," + createUser + "," + createTime + "," + updateUser + "," + updateTime + "");
-				valBuilder.append(",#{entity.createUser},#{entity.createTime},#{entity.updateUser},#{entity.updateTime}");
+				valBuilder.append(",#{entity.create_user},#{entity.create_date},#{entity.update_user},#{entity.update_date}");
 			}
 			sqlBuilder.append(")");
 			valBuilder.append(")");
@@ -225,10 +226,10 @@ public class SQLBuilderHelper {
 			//version
 			boolean isVersion = annotationConfig.isVersion();
 			if (isVersion) {
-				sqlBuilder.append(","+ createUser).append("=#{entity.createUser}");
-				sqlBuilder.append(","+ createTime).append("=#{entity.createTime}");
-				sqlBuilder.append(","+ updateUser).append("=#{entity.updateUser}");
-				sqlBuilder.append(","+ updateTime).append("=#{entity.updateTime}");
+				sqlBuilder.append(","+ createUser).append("=#{entity.create_user}");
+				sqlBuilder.append(","+ createTime).append("=#{entity.create_date}");
+				sqlBuilder.append(","+ updateUser).append("=#{entity.update_user}");
+				sqlBuilder.append(","+ updateTime).append("=#{entity.update_date}");
 			}
 			sqlBuilder.append(" where id=#{entity.id}");
 			sqlConfig.setAutoUpdateSql(sqlBuilder.toString());
@@ -251,6 +252,25 @@ public class SQLBuilderHelper {
 		String sql = sqlConfig.getAutoQueryOneSql();
 		if (sql == null) {
 			sql = SelectBuilder.getUseIdSelectSql(clazz);
+			sqlConfig.setAutoQueryOneSql(sql);
+			sqlCache.put(clazz, sqlConfig);
+		}
+		return sql;
+	}
+	
+	/**
+	 * 创建查询语句
+	 * @param clazz
+	 * @return
+	 */
+	public synchronized static String builderAutoQueryOneToOneSql(Class<?> clazz,OneToOne one) {
+		SQLBuilderConfig sqlConfig = sqlCache.get(clazz);
+		if(null == sqlConfig){
+			sqlConfig = new SQLBuilderConfig();
+		}
+		String sql = sqlConfig.getAutoQueryOneToOneSql();
+		if (sql == null) {
+			sql = SelectBuilder.getOneToOneSelectSql(clazz, one);
 			sqlConfig.setAutoQueryOneSql(sql);
 			sqlCache.put(clazz, sqlConfig);
 		}

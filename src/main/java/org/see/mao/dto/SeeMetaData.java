@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author Joshua Wang
  * @date 2016年7月1日
  */
-public abstract class MetaData implements Serializable {
+public abstract class SeeMetaData implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +54,7 @@ public abstract class MetaData implements Serializable {
 	/**
 	 * See平台List包装器
 	 */
-	private PaginationList<MetaData> seeListBean;
+	private SeePaginationList<SeeMetaData> seeListBean;
 
 	/**
 	 * @return the id
@@ -156,7 +156,7 @@ public abstract class MetaData implements Serializable {
 	 * @return the seeListBean
 	 */
 	@JsonIgnore
-	public PaginationList<MetaData> getSeeListBean() {
+	public SeePaginationList<SeeMetaData> getSeeListBean() {
 		return seeListBean;
 	}
 
@@ -164,7 +164,7 @@ public abstract class MetaData implements Serializable {
 	 * @param seeListBean
 	 *            the seeListBean to set
 	 */
-	public void setSeeListBean(PaginationList<MetaData> seeListBean) {
+	public void setSeeListBean(SeePaginationList<SeeMetaData> seeListBean) {
 		this.seeListBean = seeListBean;
 	}
 
@@ -176,7 +176,7 @@ public abstract class MetaData implements Serializable {
 	@JsonIgnore
 	public PagingCriteria getPagingCriteria() {
 		if (seeListBean == null) {
-			seeListBean = new PaginationList<MetaData>();
+			seeListBean = new SeePaginationList<SeeMetaData>();
 		}
 		return seeListBean.getPagingCriteria();
 	}

@@ -19,8 +19,8 @@ import org.see.mao.MaoExecutor;
 import org.see.mao.PagingParametersFinder;
 import org.see.mao.common.CountHelper;
 import org.see.mao.common.proxy.ProxyHelper;
-import org.see.mao.dto.MetaData;
-import org.see.mao.dto.PaginationList;
+import org.see.mao.dto.SeeMetaData;
+import org.see.mao.dto.SeePaginationList;
 import org.see.mao.dto.datatables.PagingCriteria;
 
 /**
@@ -98,7 +98,7 @@ public class MaoInterceptor extends CustomerPluginSuper implements Interceptor, 
 			queryArgs[MAPPED_STATEMENT_INDEX] = newMs;
 			PAGE_REQUEST.set(pageRequest);
 			obj = invocation.proceed();
-			PaginationList<MetaData> list = (PaginationList<MetaData>) obj;
+			SeePaginationList<SeeMetaData> list = (SeePaginationList<SeeMetaData>) obj;
 			//pageNo > 1时，且列表中只有一条数据，处理执行删除数据后回显列表
 			if(list == null || list.size()==0){//如查询列表为空，则查询上一页
 				int pageNo = pageRequest.getPageNumber();

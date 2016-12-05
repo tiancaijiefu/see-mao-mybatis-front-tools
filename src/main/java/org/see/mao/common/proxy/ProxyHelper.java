@@ -3,7 +3,7 @@ package org.see.mao.common.proxy;
 import java.util.List;
 
 import org.see.mao.common.reflex.AnnotationReflections;
-import org.see.mao.dto.MetaData;
+import org.see.mao.dto.SeeMetaData;
 import org.see.mao.persistence.MetaDataAnnotationConfig;
 
 /**
@@ -20,10 +20,10 @@ public class ProxyHelper {
 	public static Object proxy(Object object){
 		Class<?> clazz = object.getClass();
 		MetaDataAnnotationConfig config = null;//AnnotationReflectionHelper.getAnnotationConfig(clazz);
-		if (MetaData.class.isAssignableFrom(object.getClass())) {
+		if (SeeMetaData.class.isAssignableFrom(object.getClass())) {
 			config = AnnotationReflections.getAnnotationConfig(clazz);
 			if(config.isAssociate()){
-				object = new MaoProxy().getProxy((MetaData)object);
+				object = new MaoProxy().getProxy((SeeMetaData)object);
 			}
 		}
 		if(List.class.isAssignableFrom(clazz)){
@@ -31,7 +31,7 @@ public class ProxyHelper {
 			if(list.size() > 0){
 				Object o = list.get(0);
 				Class<?>  clazz_ = o.getClass();
-				if (MetaData.class.isAssignableFrom(clazz_)) {
+				if (SeeMetaData.class.isAssignableFrom(clazz_)) {
 					config = AnnotationReflections.getAnnotationConfig(clazz_);
 					if(config.isAssociate()){
 						object = new MaoProxy().getProxy(list);

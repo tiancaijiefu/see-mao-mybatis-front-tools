@@ -1,6 +1,6 @@
 package org.see.mao.mapper;
 
-import org.see.mao.dto.MetaData;
+import org.see.mao.dto.SeeMetaData;
 import org.see.mao.persistence.Repository;
 
 /**
@@ -8,6 +8,6 @@ import org.see.mao.persistence.Repository;
  * @date 2016年12月1日
  */
 @Repository
-public interface CustomMapper extends BaseMapper<MetaData> {
+public interface CustomMapper extends BaseMapper<SeeMetaData> {
 
 }
