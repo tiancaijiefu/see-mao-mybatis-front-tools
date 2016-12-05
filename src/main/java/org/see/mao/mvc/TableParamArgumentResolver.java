@@ -1,7 +1,3 @@
-/*
- * Copyright © 2012-2013 mumu@yfyang. All Rights Reserved.
- */
-
 package org.see.mao.mvc;
 
 import java.util.List;
@@ -21,14 +17,12 @@ import com.google.common.collect.Lists;
 
 /**
  * <p>
- * resolver paramArgument with annotation.
+ * 		resolver paramArgument with annotation.
  * </p>
  *
  * @author mumu @yfyang
- * @version 1.0 2013-09-05 10:44 PM
- * @see
- * @see
- * @since JDK 1.5
+ * @author Joshua Wang
+ * @since JDK 1.8
  */
 public class TableParamArgumentResolver implements WebArgumentResolver {
     /**

@@ -60,7 +60,7 @@
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="org.see" />
-		<property name="annotationClass" value="org.see.mao.persistence.MaoRepository"></property>
+		<property name="annotationClass" value="org.see.mao.persistence.Repository"></property>
 	</bean>
 
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

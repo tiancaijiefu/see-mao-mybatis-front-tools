@@ -1,11 +1,11 @@
-package org.see.mao.helpers.sql;
+package org.see.mao.common.sql;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-import org.see.mao.helpers.AnnotationReflectionHelper;
-import org.see.mao.helpers.sql.dbms.SelectBuilder;
+import org.see.mao.common.reflex.AnnotationReflections;
+import org.see.mao.common.sql.build.SelectBuilder;
 import org.see.mao.persistence.AnnotationTag;
 import org.see.mao.persistence.MetaDataAnnotationConfig;
 import org.see.mao.persistence.SQLBuilderConfig;
@@ -18,7 +18,7 @@ import org.springframework.util.ConcurrentReferenceHashMap;
  * @author Joshua Wang
  * @date 2016年11月28日
  */
-public class MaoSQLBuilderHelper {
+public class SQLBuilderHelper {
 
 	/** sqlConfig's cache */
 	private static final Map<Class<?>, SQLBuilderConfig> sqlCache = new ConcurrentReferenceHashMap<Class<?>, SQLBuilderConfig>(256);
@@ -145,7 +145,7 @@ public class MaoSQLBuilderHelper {
 			sqlConfig = sqlConfig!=null?sqlConfig:new SQLBuilderConfig();
 			StringBuilder sqlBuilder = new StringBuilder("insert into ");
 			StringBuilder valBuilder = new StringBuilder(" values(");
-			MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+			MetaDataAnnotationConfig annotationConfig = AnnotationReflections.getAnnotationConfig(clazz);
 			// tableName
 			sqlBuilder.append(annotationConfig.getTableName()).append("(");
 			// id
@@ -209,7 +209,7 @@ public class MaoSQLBuilderHelper {
 		if (sql == null) {
 			sqlConfig = sqlConfig!=null?sqlConfig:new SQLBuilderConfig();
 			StringBuilder sqlBuilder = new StringBuilder("update ");
-			MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+			MetaDataAnnotationConfig annotationConfig = AnnotationReflections.getAnnotationConfig(clazz);
 			// tableName
 			sqlBuilder.append(annotationConfig.getTableName()).append(" set ");
 			// columns

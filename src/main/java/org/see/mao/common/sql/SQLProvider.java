@@ -1,11 +1,11 @@
-package org.see.mao.helpers.sql;
+package org.see.mao.common.sql;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
+import org.see.mao.common.StringHelper;
 import org.see.mao.exception.MaoException;
-import org.see.mao.helpers.StringHelper;
 import org.see.mao.persistence.AnnotationTag;
 import org.see.mao.persistence.Table;
 
@@ -13,7 +13,7 @@ import org.see.mao.persistence.Table;
  * @author Joshua Wang
  * @date 2016年11月18日
  */
-public class MaoSQLProvider {
+public class SQLProvider {
 	
 	private static final String FIRST_FRAGMENT_FIX = "#";
 	
@@ -69,7 +69,7 @@ public class MaoSQLProvider {
 		if (null == sql) {
 			throw new MaoException("sql is null.");
 		}
-		sql = getSql(MaoSQLBuilderHelper.formatCustomUpdateSql(entity.getClass(), sql));
+		sql = getSql(SQLBuilderHelper.formatCustomUpdateSql(entity.getClass(), sql));
 		System.err.println("修改原版SQL : " + sql);
 		return sql;
 	}
@@ -87,7 +87,7 @@ public class MaoSQLProvider {
 		if (null == sql) {
 			throw new MaoException("sql is null.");
 		}
-		sql = getSql(MaoSQLBuilderHelper.formatCustomInsertSql(entity.getClass(), sql));
+		sql = getSql(SQLBuilderHelper.formatCustomInsertSql(entity.getClass(), sql));
 		System.err.println("插入原版SQL : " + sql);
 		return sql;
 	}
@@ -105,7 +105,7 @@ public class MaoSQLProvider {
 		if (null == entity) {
 			throw new MaoException("保存对象为null，请确认!");
 		}
-		String sql = MaoSQLBuilderHelper.builderAutoInsertSql(entity);
+		String sql = SQLBuilderHelper.builderAutoInsertSql(entity);
 		System.err.println("插入原版SQL : " + sql);
 		return sql;
 	}
@@ -123,7 +123,7 @@ public class MaoSQLProvider {
 		if (null == entity) {
 			throw new MaoException("修改对象为null，请确认!");
 		}
-		String sql = MaoSQLBuilderHelper.builderAutoUpdateSql(entity);
+		String sql = SQLBuilderHelper.builderAutoUpdateSql(entity);
 		System.err.println("修改原版SQL : " + sql);
 		return sql;
 	}
@@ -222,7 +222,7 @@ public class MaoSQLProvider {
 		if(StringHelper.isBlank(tableName)){
 			throw new MaoException(clazz.getName()+"没有设置annotation @Table的名称(name)!");
 		}
-		return MaoSQLBuilderHelper.builderAutoQuerySql(clazz);
+		return SQLBuilderHelper.builderAutoQuerySql(clazz);
 	}
 	
 	public String createDeleteSQL(Map<String, Object> params){

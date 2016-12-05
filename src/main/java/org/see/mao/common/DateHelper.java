@@ -1,4 +1,4 @@
-package org.see.mao.helpers;
+package org.see.mao.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

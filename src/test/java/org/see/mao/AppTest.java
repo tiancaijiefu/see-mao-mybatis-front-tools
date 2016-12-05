@@ -1,25 +1,22 @@
 package org.see.mao;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.see.mao.dto.SeeMetaData;
-import org.see.mao.dto.SeePaginationList;
+import org.see.mao.common.ConvertHelper;
+import org.see.mao.common.proxy.MaoProxy;
+import org.see.mao.common.reflex.Reflections;
+import org.see.mao.dto.PaginationList;
 import org.see.mao.dto.datatables.PagingCriteria;
-import org.see.mao.helpers.ConvertHelper;
-import org.see.mao.helpers.proxy.MaoProxy;
-import org.see.mao.helpers.reflex.Reflections;
-import org.see.mao.mapper.BaseMapper;
+import org.see.mao.mapper.MenuMapper;
 import org.see.mao.mapper.OrgMapper;
 import org.see.mao.mapper.RoleMapper;
 import org.see.mao.mapper.UserMapper;
+import org.see.mao.model.MenuTree;
 import org.see.mao.model.Org;
 import org.see.mao.model.Role;
 import org.see.mao.model.User;
@@ -50,6 +47,9 @@ public class AppTest extends TestCase {
 	
 	@Autowired
 	RoleMapper roleMapper;
+	
+	@Autowired
+	MenuMapper menuMapper;
 	
 	@Autowired
 	UserService userService;
@@ -83,19 +83,18 @@ public class AppTest extends TestCase {
 	@Test
 	public void pageList(){
 		
-//		MenuTree menuTree = new MenuTree();
-//		
-//		PagingCriteria pc = menuTree.getPagingCriteria();
-//		
-//		menuTree.getSeeListBean().setPageNo(3);
-//		
-//		
-//		String sql = "select id,menu_name name,menu_url url,icon_skin icon from wp_menu";
-//		
-//		SeePaginationList<MenuTree> list = menuMapper.listByPage(menuTree.getPagingCriteria(), menuTree, sql);
-//		
-//		System.err.println(list.get(0).getOrg());
-//		System.err.println(list.get(1).getOrg());
+		MenuTree menuTree = new MenuTree();
+		
+		PagingCriteria pc = menuTree.getPagingCriteria();
+		
+		menuTree.getSeeListBean().setPageNo(3);
+		
+		
+		String sql = "select id,menu_name name,menu_url url,icon_skin icon from wp_menu";
+		
+		PaginationList<MenuTree> list = menuMapper.listByPage(menuTree.getPagingCriteria(), menuTree, sql);
+		
+		System.err.println(list);
 		
 	}
 	

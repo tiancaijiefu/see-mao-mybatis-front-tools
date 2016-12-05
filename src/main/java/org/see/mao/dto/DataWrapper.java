@@ -6,16 +6,16 @@ import java.util.List;
  * @author Joshua Wang
  * @date 2016年11月25日
  */
-public class SeeWrapper {
+public class DataWrapper {
 
-	private SeeMetaData seeMetaData;
+	private MetaData seeMetaData;
 
-	private List<SeeMetaData> seeMetaDataList;
+	private List<MetaData> seeMetaDataList;
 
 	/**
 	 * @return the seeMetaData
 	 */
-	public SeeMetaData getSeeMetaData() {
+	public MetaData getSeeMetaData() {
 		return seeMetaData;
 	}
 
@@ -23,14 +23,14 @@ public class SeeWrapper {
 	 * @param seeMetaData
 	 *            the seeMetaData to set
 	 */
-	public void setSeeMetaData(SeeMetaData seeMetaData) {
+	public void setSeeMetaData(MetaData seeMetaData) {
 		this.seeMetaData = seeMetaData;
 	}
 
 	/**
 	 * @return the seeMetaDataList
 	 */
-	public List<SeeMetaData> getSeeMetaDataList() {
+	public List<MetaData> getSeeMetaDataList() {
 		return seeMetaDataList;
 	}
 
@@ -38,7 +38,7 @@ public class SeeWrapper {
 	 * @param seeMetaDataList
 	 *            the seeMetaDataList to set
 	 */
-	public void setSeeMetaDataList(List<SeeMetaData> seeMetaDataList) {
+	public void setSeeMetaDataList(List<MetaData> seeMetaDataList) {
 		this.seeMetaDataList = seeMetaDataList;
 	}
 

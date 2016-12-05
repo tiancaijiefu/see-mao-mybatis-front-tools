@@ -1,4 +1,4 @@
-package org.see.mao.helpers;
+package org.see.mao.common;
 
 /**
  * <p>

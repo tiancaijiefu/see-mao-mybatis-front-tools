@@ -17,11 +17,11 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.see.mao.MaoExecutor;
 import org.see.mao.PagingParametersFinder;
-import org.see.mao.dto.SeeMetaData;
-import org.see.mao.dto.SeePaginationList;
+import org.see.mao.common.CountHelper;
+import org.see.mao.common.proxy.ProxyHelper;
+import org.see.mao.dto.MetaData;
+import org.see.mao.dto.PaginationList;
 import org.see.mao.dto.datatables.PagingCriteria;
-import org.see.mao.helpers.CountHelper;
-import org.see.mao.helpers.proxy.ProxyHelper;
 
 /**
  * @author Joshua Wang
@@ -30,7 +30,7 @@ import org.see.mao.helpers.proxy.ProxyHelper;
 @Intercepts({
 	@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
 	@Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }) })
-public class MaoInterceptor extends SeeInterceptor implements Interceptor, Serializable{
+public class MaoInterceptor extends CustomerPluginSuper implements Interceptor, Serializable{
 	/** serial Version */
 	private static final long serialVersionUID = 1L;
 	
@@ -98,7 +98,7 @@ public class MaoInterceptor extends SeeInterceptor implements Interceptor, Seria
 			queryArgs[MAPPED_STATEMENT_INDEX] = newMs;
 			PAGE_REQUEST.set(pageRequest);
 			obj = invocation.proceed();
-			SeePaginationList<SeeMetaData> list = (SeePaginationList<SeeMetaData>) obj;
+			PaginationList<MetaData> list = (PaginationList<MetaData>) obj;
 			//pageNo > 1时，且列表中只有一条数据，处理执行删除数据后回显列表
 			if(list == null || list.size()==0){//如查询列表为空，则查询上一页
 				int pageNo = pageRequest.getPageNumber();

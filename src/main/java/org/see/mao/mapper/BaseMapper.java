@@ -9,10 +9,10 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.see.mao.dto.SeeMetaData;
-import org.see.mao.dto.SeePaginationList;
+import org.see.mao.common.sql.SQLProvider;
+import org.see.mao.dto.MetaData;
+import org.see.mao.dto.PaginationList;
 import org.see.mao.dto.datatables.PagingCriteria;
-import org.see.mao.helpers.sql.MaoSQLProvider;
 
 /**
  * <p>
@@ -22,7 +22,7 @@ import org.see.mao.helpers.sql.MaoSQLProvider;
  * @author Joshua Wang
  * @date 2016年11月17日
  */
-public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
+public interface BaseMapper<T> extends MapperConfiguration {
 	
 	/**
 	 * 获取实体对象
@@ -30,7 +30,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param id
 	 * @return Object
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = QUERY_AUTO_SQL_DEVICE)
+	@SelectProvider(type = SQLProvider.class, method = QUERY_AUTO_SQL_DEVICE)
 	public T get(@Param("clazz") Class<T> clazz,@Param("id") Serializable id);
 	
 	/**
@@ -40,7 +40,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = QUERY_ID_SQL_DEVICE)
+	@SelectProvider(type = SQLProvider.class, method = QUERY_ID_SQL_DEVICE)
 	public T getOne(@Param("id") Serializable param, @Param("sql") String sql);
 	
 	/**
@@ -50,7 +50,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = CUSTOM_SQL_DEVICE)
+	@SelectProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
 	public T getOneByEntity(@Param("entity") T entity,@Param("sql") String sql);
 	
 	/**
@@ -59,7 +59,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = QUERY_ID_SQL_DEVICE)
+	@SelectProvider(type = SQLProvider.class, method = QUERY_ID_SQL_DEVICE)
 	public List<T> listByParam(@Param("id")Serializable param,@Param("sql") String sql);
 	
 	/**
@@ -69,7 +69,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = CUSTOM_SQL_DEVICE)
+	@SelectProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
 	public List<T> listByEntity(@Param("entity") T entity, @Param("sql") String sql);
 
 	/**
@@ -78,8 +78,8 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param pagingCriteria
 	 * @return
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = CUSTOM_SQL_DEVICE)
-	SeePaginationList<T> listByPage(PagingCriteria pagingCriteria,@Param("entity") T entity, @Param("sql") String sql);
+	@SelectProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
+	PaginationList<T> listByPage(PagingCriteria pagingCriteria,@Param("entity") T entity, @Param("sql") String sql);
 	
 	/**
 	 * 保存对象
@@ -87,7 +87,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param entity
 	 * @return
 	 */
-	@InsertProvider(type = MaoSQLProvider.class, method = AUTO_INSERT_SQL_DEVICE)
+	@InsertProvider(type = SQLProvider.class, method = AUTO_INSERT_SQL_DEVICE)
 	public int save(@Param("entity") T entity);
 	
 	/**
@@ -97,7 +97,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@InsertProvider(type = MaoSQLProvider.class, method = CUSTOM_INSERT_SQL_DEVICE)
+	@InsertProvider(type = SQLProvider.class, method = CUSTOM_INSERT_SQL_DEVICE)
 	public int saveEntity(@Param("entity") T entity, @Param("sql") String sql);
 	
 	/**
@@ -108,7 +108,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param columns
 	 * @return
 	 */
-	@InsertProvider(type = MaoSQLProvider.class, method = BATCH_INSERT_SQL_DEVICE)
+	@InsertProvider(type = SQLProvider.class, method = BATCH_INSERT_SQL_DEVICE)
 	public int saveEntities(@Param("entities") List<T> entities, @Param("tableName") String tableName, @Param("columns") String[] columns, @Param("fields") String[] fields);
 	
 	/**
@@ -117,7 +117,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param id	要删除的数据库中的ID
 	 * @return
 	 */
-	@DeleteProvider(type = MaoSQLProvider.class, method = DELETE_SQL_DEVICE)
+	@DeleteProvider(type = SQLProvider.class, method = DELETE_SQL_DEVICE)
 	public int delete(@Param("clazz") Class<?> clazz,@Param("id") Serializable id);
 	
 	/**
@@ -128,7 +128,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@DeleteProvider(type = MaoSQLProvider.class, method = CUSTOM_SQL_DEVICE)
+	@DeleteProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
 	public int deleteBySql(@Param("sql") String sql);
 
 	/**
@@ -138,7 +138,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@DeleteProvider(type = MaoSQLProvider.class, method = CUSTOM_SQL_DEVICE)
+	@DeleteProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
 	public int deleteByEntityAndSql(@Param("entity") T entity, @Param("sql") String sql);
 
 	/**
@@ -147,7 +147,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param entity
 	 * @return
 	 */
-	@UpdateProvider(type = MaoSQLProvider.class, method = AUTO_UPDATE_SQL_DEVICE)
+	@UpdateProvider(type = SQLProvider.class, method = AUTO_UPDATE_SQL_DEVICE)
 	public int update(@Param("entity") T entity);
 	
 	/**
@@ -157,7 +157,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@UpdateProvider(type = MaoSQLProvider.class, method = CUSTOM_SQL_DEVICE)
+	@UpdateProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
 	public int updateBySql(@Param("sql") String sql);
 
 	/**
@@ -167,7 +167,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return
 	 */
-	@UpdateProvider(type = MaoSQLProvider.class, method = CUSTOM_UPDATE_SQL_DEVICE)
+	@UpdateProvider(type = SQLProvider.class, method = CUSTOM_UPDATE_SQL_DEVICE)
 	public int updateEntity(@Param("entity") T entity, @Param("sql") String sql);
 	
 	//===============================非泛型操作区域(java.util.Map)============================================
@@ -178,7 +178,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return java.util.List<Map<String,String>;
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = QUERY_ID_SQL_DEVICE)
+	@SelectProvider(type = SQLProvider.class, method = QUERY_ID_SQL_DEVICE)
 	public Map<String,String> getMap(@Param("id")Serializable param,@Param("sql") String sql);
 	
 	/**
@@ -187,7 +187,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return java.util.List<Map<String,String>;
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = QUERY_ID_SQL_DEVICE)
+	@SelectProvider(type = SQLProvider.class, method = QUERY_ID_SQL_DEVICE)
 	public List<Map<String,String>> getMapsByParam(@Param("id")Serializable param,@Param("sql") String sql);
 	
 	/**
@@ -196,8 +196,8 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return java.util.List<Map<String,String>;
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = CUSTOM_SQL_DEVICE)
-	public Map<String,String> getMapByEntity(@Param("entity") SeeMetaData entity, @Param("sql") String sql);
+	@SelectProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
+	public Map<String,String> getMapByEntity(@Param("entity") MetaData entity, @Param("sql") String sql);
 	
 	/**
 	 * 根据entity查询结果集（Map）
@@ -205,7 +205,7 @@ public interface BaseMapper<T extends SeeMetaData> extends MapperConfiguration {
 	 * @param sql
 	 * @return	java.util.List<Map<String,String>;
 	 */
-	@SelectProvider(type = MaoSQLProvider.class, method = CUSTOM_SQL_DEVICE)
-	public List<Map<String,String>> getMapsByEntity(@Param("entity") SeeMetaData entity, @Param("sql") String sql);
+	@SelectProvider(type = SQLProvider.class, method = CUSTOM_SQL_DEVICE)
+	public List<Map<String,String>> getMapsByEntity(@Param("entity") MetaData entity, @Param("sql") String sql);
 	
 }

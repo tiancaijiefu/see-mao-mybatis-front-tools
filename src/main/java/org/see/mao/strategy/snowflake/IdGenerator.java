@@ -1,6 +1,6 @@
 package org.see.mao.strategy.snowflake;
 
-import org.see.mao.helpers.StringHelper;
+import org.see.mao.common.StringHelper;
 import org.see.mao.strategy.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,17 +12,17 @@ import org.slf4j.LoggerFactory;
  * @author Joshua Wang
  * @date 2016年7月1日
  */
-public class SnowflakeIdGenerator {
+public class IdGenerator {
 	
-	private static SnowflakeIdWorker snowflakeIdWorker;
+	private static IdWorker snowflakeIdWorker;
 	
-	private static Logger logger = LoggerFactory.getLogger(SnowflakeIdGenerator.class);
+	private static Logger logger = LoggerFactory.getLogger(IdGenerator.class);
 	
 	private static String datacenterId;//数据中心序号
 	private static String workerId;//数据中心的机器序号
 	private static String twepochStr;//时间戳基数
 	
-	private SnowflakeIdGenerator(){
+	private IdGenerator(){
 		
 	}
 	
@@ -32,7 +32,7 @@ public class SnowflakeIdGenerator {
 		twepochStr = 	PropertiesUtils.getProperty("twepoch.long");
 		//生成发号器对象
 		try {
-			snowflakeIdWorker = new SnowflakeIdWorker(Long.parseLong(StringHelper.noNull(workerId)), 
+			snowflakeIdWorker = new IdWorker(Long.parseLong(StringHelper.noNull(workerId)), 
 					  Long.parseLong(StringHelper.noNull(datacenterId)),
 					  0,
 					  Long.parseLong(StringHelper.noNull(twepochStr)));

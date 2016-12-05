@@ -6,7 +6,7 @@ import java.util.Random;
  * @author Joshua Wang
  * @date 2016年7月1日
  */
-public class SnowflakeIdWorker {
+public class IdWorker {
 	// 机器标识位数
 	private static final long workerIdBits = 5L;
 	// 数据中心标识位数
@@ -40,19 +40,19 @@ public class SnowflakeIdWorker {
 
 	private long sequence = 0;
 
-	public SnowflakeIdWorker() {
+	public IdWorker() {
 		this(startTimeStamp);
 	}
 
-	public SnowflakeIdWorker(long idEpoch) {
+	public IdWorker(long idEpoch) {
 		this(r.nextInt((int) maxWorkerId), r.nextInt((int) maxDataCenterId), 0, idEpoch);
 	}
 
-	public SnowflakeIdWorker(long workerId, long dataCenterId, long sequence) {
+	public IdWorker(long workerId, long dataCenterId, long sequence) {
 		this(workerId, dataCenterId, sequence, startTimeStamp);
 	}
 
-	public SnowflakeIdWorker(long workerId, long dataCenterId, long sequence, long idEpoch) {
+	public IdWorker(long workerId, long dataCenterId, long sequence, long idEpoch) {
 		this.workerId = workerId;
 		this.dataCenterId = dataCenterId;
 		this.sequence = sequence;

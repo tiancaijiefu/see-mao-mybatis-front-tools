@@ -1,11 +1,10 @@
-package org.see.mao.helpers;
+package org.see.mao.common.reflex;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
 import org.see.mao.exception.MaoException;
-import org.see.mao.helpers.reflex.Reflections;
 import org.see.mao.persistence.AnnotationTag;
 import org.see.mao.persistence.Column;
 import org.see.mao.persistence.Id;
@@ -20,7 +19,7 @@ import com.google.common.collect.Lists;
  * @author Joshua Wang
  * @date 2016年11月28日
  */
-public class AnnotationReflectionHelper {
+public class AnnotationReflections {
 
 	/**
 	 * Cache for {@link Class and Super #getDeclaredFields()}, allowing for fast

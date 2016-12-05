@@ -4,9 +4,9 @@
 
 package org.see.mao.dialect.db;
 
+import org.see.mao.common.StringHelper;
+import org.see.mao.common.sql.SqlRemoveHelper;
 import org.see.mao.dialect.Dialect;
-import org.see.mao.helpers.StringHelper;
-import org.see.mao.helpers.sql.SqlRemoveHelper;
 
 /**
  * Sql 2005的方言实现

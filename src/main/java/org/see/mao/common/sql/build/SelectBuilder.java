@@ -1,13 +1,13 @@
-package org.see.mao.helpers.sql.dbms;
+package org.see.mao.common.sql.build;
 
-import org.see.mao.helpers.AnnotationReflectionHelper;
+import org.see.mao.common.reflex.AnnotationReflections;
 import org.see.mao.persistence.MetaDataAnnotationConfig;
 
 /**
  * @author Joshua Wang
  * @date 2016年12月2日
  */
-public class SelectBuilder extends MaoSqlBuilder {
+public class SelectBuilder extends SqlBuilder {
 	
 	/**
 	 * 根据类获取sql
@@ -15,7 +15,7 @@ public class SelectBuilder extends MaoSqlBuilder {
 	 * @return
 	 */
 	public static String getUseIdSelectSql(Class<?> clazz){
-		MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		MetaDataAnnotationConfig annotationConfig = AnnotationReflections.getAnnotationConfig(clazz);
 		String table  = annotationConfig.getTableName();
 		String table_ = table+"_";
 		String columns = getColumnsStr(clazz, table_);
@@ -33,7 +33,7 @@ public class SelectBuilder extends MaoSqlBuilder {
 	 * @return
 	 */
 	public static String getUserWhereColumnSelectSql(Class<?> clazz,String whereColumn){
-		MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		MetaDataAnnotationConfig annotationConfig = AnnotationReflections.getAnnotationConfig(clazz);
 		String table  = annotationConfig.getTableName();
 		String table_ = table+"_";
 		String columns = getColumnsStr(clazz, table_);

@@ -1,23 +1,14 @@
-/*
- * Copyright © 2012-2013 mumu@yfyang. All Rights Reserved.
- */
-
 package org.see.mao.mvc;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.see.mao.dto.PageMyBatis;
-
+import org.see.mao.dto.PageArrayList;
 
 /**
- * <p>
- * .
- * </p>
- *
  * @author mumu@yfyang
- * @version 1.0 2013-09-05 10:48 PM
- * @since JDK 1.5
+ * @author Joshua Wang
+ * @since JDK 1.8
  */
 public final class DataTablesResultSet<T> {
     private final int sEcho;
@@ -31,7 +22,7 @@ public final class DataTablesResultSet<T> {
      * @param sEcho the pc
      * @param rs the rs
      */
-    public DataTablesResultSet(int sEcho, PageMyBatis<T> rs) {
+    public DataTablesResultSet(int sEcho, PageArrayList<T> rs) {
         this.sEcho = sEcho;
         this.aaData = rs;
         this.iTotalRecords = rs.getTotal();

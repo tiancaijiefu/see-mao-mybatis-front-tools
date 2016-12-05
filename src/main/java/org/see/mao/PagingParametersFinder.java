@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanMap;
+import org.see.mao.common.StringHelper;
 import org.see.mao.dto.datatables.PagingCriteria;
-import org.see.mao.helpers.StringHelper;
 
 import com.google.common.collect.Maps;
 

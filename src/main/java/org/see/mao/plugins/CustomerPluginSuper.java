@@ -13,18 +13,19 @@ import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.session.RowBounds;
+import org.see.mao.common.CountHelper;
+import org.see.mao.common.StringHelper;
+import org.see.mao.common.reflex.Reflections;
+import org.see.mao.common.sql.SqlRemoveHelper;
 import org.see.mao.dialect.DBMS;
 import org.see.mao.dialect.Dialect;
 import org.see.mao.dialect.DialectClient;
-import org.see.mao.dto.SeeMetaData;
-import org.see.mao.dto.SeeWrapper;
+import org.see.mao.dto.MetaData;
+import org.see.mao.dto.DataWrapper;
 import org.see.mao.dto.datatables.PagingCriteria;
 import org.see.mao.dto.datatables.SearchField;
 import org.see.mao.dto.datatables.SortField;
-import org.see.mao.helpers.CountHelper;
-import org.see.mao.helpers.StringHelper;
-import org.see.mao.helpers.reflex.Reflections;
-import org.see.mao.helpers.sql.SqlRemoveHelper;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -34,10 +35,10 @@ import com.google.common.collect.Lists;
  * @date 2016年11月23日
  */
 @SuppressWarnings("unchecked")
-public abstract class SeeInterceptor {
+public abstract class CustomerPluginSuper {
 	
 	/** logging */
-	protected static final Log log = LogFactory.getLog(SeeInterceptor.class);
+	protected static final Log log = LogFactory.getLog(CustomerPluginSuper.class);
 	
 	/**总记录数线程*/
 	protected static final ThreadLocal<Integer> PAGINATION_TOTAL = new ThreadLocal<Integer>();
@@ -189,12 +190,12 @@ public abstract class SeeInterceptor {
 		}
 	}
 	
-	protected static SeeWrapper getRequestSeeWrapper(Object[] invocationArgs) {
+	protected static DataWrapper getRequestSeeWrapper(Object[] invocationArgs) {
 		Object parameter = invocationArgs[1];
-		SeeWrapper seeWrapper = new SeeWrapper();
-		SeeMetaData seeMetaData = null;
-		if (SeeMetaData.class.isAssignableFrom(parameter.getClass())) {
-			seeMetaData = (SeeMetaData) parameter;
+		DataWrapper seeWrapper = new DataWrapper();
+		MetaData seeMetaData = null;
+		if (MetaData.class.isAssignableFrom(parameter.getClass())) {
+			seeMetaData = (MetaData) parameter;
 			seeWrapper.setSeeMetaData(seeMetaData);
 		} else if(Map.class.isAssignableFrom(parameter.getClass())) {
 			Map<String, Object> paramMap = (Map<String, Object>) parameter;
@@ -205,13 +206,13 @@ public abstract class SeeInterceptor {
 					if(val == null){
 						continue;
 					}
-					if (SeeMetaData.class.isAssignableFrom(val.getClass())) {
-						seeMetaData = (SeeMetaData) val;
+					if (MetaData.class.isAssignableFrom(val.getClass())) {
+						seeMetaData = (MetaData) val;
 						seeWrapper.setSeeMetaData(seeMetaData);
 						break;
 					}
 					if(List.class.isAssignableFrom(val.getClass())){
-						seeWrapper.setSeeMetaDataList((List<SeeMetaData>)val);
+						seeWrapper.setSeeMetaDataList((List<MetaData>)val);
 						break;
 					}
 				}

@@ -1,13 +1,13 @@
 package org.see.mao.ref.model;
 
-import org.see.mao.dto.SeeMetaData;
-import org.see.mao.helpers.DateHelper;
+import org.see.mao.common.DateHelper;
+import org.see.mao.dto.MetaData;
 
 /**
  * @author Joshua Wang
  * @date 2016年11月17日
  */
-public class BaseModel extends SeeMetaData{
+public class BaseModel extends MetaData{
 
 	private static final long serialVersionUID = 1L;
 	

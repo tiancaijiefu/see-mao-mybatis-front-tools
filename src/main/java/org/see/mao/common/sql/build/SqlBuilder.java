@@ -1,9 +1,9 @@
-package org.see.mao.helpers.sql.dbms;
+package org.see.mao.common.sql.build;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.see.mao.helpers.AnnotationReflectionHelper;
+import org.see.mao.common.reflex.AnnotationReflections;
 import org.see.mao.persistence.AnnotationTag;
 import org.see.mao.persistence.MetaDataAnnotationConfig;
 import org.see.mao.persistence.VersionConfig;
@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
  * @author Joshua Wang
  * @date 2016年12月1日
  */
-public abstract class MaoSqlBuilder {
+public abstract class SqlBuilder {
 	
 	private static final List<String> versionColumns = Lists.newArrayList();
 	
@@ -31,7 +31,7 @@ public abstract class MaoSqlBuilder {
 	 * @return
 	 */
 	public static List<String> getColumns(Class<?> clazz){
-		MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		MetaDataAnnotationConfig annotationConfig = AnnotationReflections.getAnnotationConfig(clazz);
 		List<Field> fieldList = annotationConfig.getColumnFields();
 		List<String> columns = Lists.newArrayList();
 		int len = fieldList.size();
@@ -52,7 +52,7 @@ public abstract class MaoSqlBuilder {
 	 * @return
 	 */
 	public static List<String> getColumns(Class<?> clazz,String alias){
-		MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		MetaDataAnnotationConfig annotationConfig = AnnotationReflections.getAnnotationConfig(clazz);
 		List<Field> fieldList = annotationConfig.getColumnFields();
 		List<String> columns = Lists.newArrayList();
 		int len = fieldList.size();
@@ -75,7 +75,7 @@ public abstract class MaoSqlBuilder {
 	 * @return
 	 */
 	public static String getColumnsStr(Class<?> clazz){
-		MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		MetaDataAnnotationConfig annotationConfig = AnnotationReflections.getAnnotationConfig(clazz);
 		List<Field> fieldList = annotationConfig.getColumnFields();
 		StringBuilder builder = new StringBuilder();
 		int len = fieldList.size();
@@ -101,7 +101,7 @@ public abstract class MaoSqlBuilder {
 	 * @return
 	 */
 	public static String getColumnsStr(Class<?> clazz,String alias){
-		MetaDataAnnotationConfig annotationConfig = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		MetaDataAnnotationConfig annotationConfig = AnnotationReflections.getAnnotationConfig(clazz);
 		List<Field> fieldList = annotationConfig.getColumnFields();
 		StringBuilder builder = new StringBuilder();
 		int len = fieldList.size();

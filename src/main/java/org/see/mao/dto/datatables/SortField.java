@@ -1,7 +1,3 @@
-/*
- * Copyright © 2012-2013 mumu@yfyang. All Rights Reserved.
- */
-
 package org.see.mao.dto.datatables;
 
 /**

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Target(ElementType.TYPE)
 @Documented
 @Component
-public @interface MaoRepository {
+public @interface Repository {
 	
 	/**
 	 * The value may indicate a suggestion for a logical component name,

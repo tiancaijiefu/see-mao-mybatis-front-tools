@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.see.mao.helpers.reflex;
+package org.see.mao.common.reflex;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

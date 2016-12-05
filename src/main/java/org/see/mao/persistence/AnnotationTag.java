@@ -2,8 +2,8 @@ package org.see.mao.persistence;
 
 import java.lang.reflect.Field;
 
+import org.see.mao.common.reflex.Reflections;
 import org.see.mao.exception.MaoException;
-import org.see.mao.helpers.reflex.Reflections;
 
 /**
  * @author Joshua Wang

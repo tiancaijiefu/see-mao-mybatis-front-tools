@@ -1,4 +1,4 @@
-package org.see.mao.helpers.sql;
+package org.see.mao.common.sql;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

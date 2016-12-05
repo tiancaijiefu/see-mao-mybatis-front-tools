@@ -11,14 +11,14 @@ import com.google.common.collect.Lists;
 
 /**
  * <p>
- * PageMyBatis.
+ * 		PageArrayList.
  * </p>
  *
  * @author mumu @yfyang
- * @version 1.0 2013-08-03 9:31 PM
- * @since JDK 1.5
+ * @author Joshua Wang
+ * @since JDK 1.8
  */
-public class PageMyBatis<E> extends ArrayList<E> {
+public class PageArrayList<E> extends ArrayList<E> {
     private static final long serialVersionUID = -3472924628671922516L;
     /**
      * data connection.
@@ -40,7 +40,7 @@ public class PageMyBatis<E> extends ArrayList<E> {
      * @param pageable the pageable
      * @param total    the total
      */
-    public PageMyBatis(Collection<? extends E> content, PagingCriteria pageable, long total) {
+    public PageArrayList(Collection<? extends E> content, PagingCriteria pageable, long total) {
         super(content);
 
         this.content.addAll(content);
@@ -53,12 +53,12 @@ public class PageMyBatis<E> extends ArrayList<E> {
      *
      * @param content the content
      */
-    public PageMyBatis(List<E> content) {
+    public PageArrayList(List<E> content) {
         // fixed total is 0 throw NullPointException
         this(content, null, null == content ? 0 : content.size());
     }
     
-    public PageMyBatis(){
+    public PageArrayList(){
     	this.total = 0;
     	pageable = null;
     }
@@ -80,7 +80,7 @@ public class PageMyBatis<E> extends ArrayList<E> {
     public DataTablesResultSet<E> warp() {
         return new DataTablesResultSet<E>(pageable == null ? 0 : pageable.getPageNumber(), this);
     }
-
+    
     @Override
     public String toString() {
     	StringBuilder strBuilder = new StringBuilder();
@@ -101,7 +101,7 @@ public class PageMyBatis<E> extends ArrayList<E> {
             return false;
         }
 
-        PageMyBatis that = (PageMyBatis) o;
+        PageArrayList that = (PageArrayList) o;
 
         return total == that.total && !(content != null ? !content.equals(that.content) : that.content != null) && !(pageable != null ? !pageable.equals(that.pageable) : that.pageable != null);
 

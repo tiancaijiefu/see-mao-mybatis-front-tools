@@ -1,4 +1,4 @@
-package org.see.mao.helpers.proxy;
+package org.see.mao.common.proxy;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.see.common.spring.SpringContextHolder;
-import org.see.mao.dto.SeeMetaData;
+import org.see.mao.common.ConvertHelper;
+import org.see.mao.common.reflex.AnnotationReflections;
+import org.see.mao.common.reflex.Reflections;
+import org.see.mao.common.sql.SQLBuilderHelper;
+import org.see.mao.common.sql.build.SelectBuilder;
+import org.see.mao.dto.MetaData;
 import org.see.mao.exception.MaoException;
-import org.see.mao.helpers.AnnotationReflectionHelper;
-import org.see.mao.helpers.ConvertHelper;
-import org.see.mao.helpers.reflex.Reflections;
-import org.see.mao.helpers.sql.MaoSQLBuilderHelper;
-import org.see.mao.helpers.sql.dbms.SelectBuilder;
 import org.see.mao.mapper.CustomMapper;
 import org.see.mao.persistence.AnnotationTag;
 import org.see.mao.persistence.MetaDataAnnotationConfig;
@@ -47,14 +47,14 @@ public class MaoProxy implements MethodInterceptor {
 	/**mapper*/
 	private static final CustomMapper mapper = SpringContextHolder.getBean(CustomMapper.class);
 	
-	public <T> T getProxy(SeeMetaData metaData){
+	public <T> T getProxy(MetaData metaData){
 		if(metaData == null){
 			throw new MaoException("生成代理出错！");
 		}
 		targetClass = metaData.getClass();
 		Enhancer enhancer = proxCache.get(targetClass);
 		if(enhancer == null){
-			MetaDataAnnotationConfig config = AnnotationReflectionHelper.getAnnotationConfig(targetClass);
+			MetaDataAnnotationConfig config = AnnotationReflections.getAnnotationConfig(targetClass);
 			List<String> associateGetNames = Lists.newArrayList(config.getAssociateGetNames());
 			enhancer = new Enhancer();
 			enhancer.setSuperclass(this.targetClass);
@@ -89,7 +89,7 @@ public class MaoProxy implements MethodInterceptor {
 		}
 		List<T> result = Lists.newArrayList();
 		for(T entity : list){
-			Object o = getProxy((SeeMetaData)entity);
+			Object o = getProxy((MetaData)entity);
 			result.add((T) o);
 		}
 		return result;
@@ -104,7 +104,7 @@ public class MaoProxy implements MethodInterceptor {
 		//执行返回
 		Object result = null;
 		Class<?> clazz = Reflections.getUserClass(object.getClass());
-		MetaDataAnnotationConfig config = AnnotationReflectionHelper.getAnnotationConfig(clazz);
+		MetaDataAnnotationConfig config = AnnotationReflections.getAnnotationConfig(clazz);
 		Field field = config.searchAssociateField(method);
 		
 		OneToOne  oneToOne  = field.getAnnotation(OneToOne.class);
@@ -122,7 +122,7 @@ public class MaoProxy implements MethodInterceptor {
 			targetClass = oneToOne.targetEntity();
 			String mappedFileGetMethodName = AnnotationTag.getMethodName(oneToOne.mappedBy());
 			Serializable id = (Serializable) Reflections.invokeMethod(object, mappedFileGetMethodName, null, null);
-			String sql = MaoSQLBuilderHelper.builderAutoQuerySql(targetClass);
+			String sql = SQLBuilderHelper.builderAutoQuerySql(targetClass);
 			result = ConvertHelper.convert(mapper.getMap(id, sql), targetClass);
 		}
 		

@@ -2,7 +2,7 @@
  * Copyright © 2012-2013 mumu@yfyang. All Rights Reserved.
  */
 
-package org.see.mao.helpers;
+package org.see.mao.common;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -21,8 +21,8 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
-import org.see.mao.dto.PageMyBatis;
-import org.see.mao.dto.SeePaginationList;
+import org.see.mao.dto.PageArrayList;
+import org.see.mao.dto.PaginationList;
 import org.see.mao.plugins.MaoInterceptor;
 
 
@@ -68,11 +68,11 @@ public class MaoExecutor implements Executor {
         int total = MaoInterceptor.getPaginationTotal();
         try {
             if (total != 0) {
-                final PageMyBatis<E> result = new PageMyBatis<E>(rows, MaoInterceptor.getPageRequest(), total);
+                final PageArrayList<E> result = new PageArrayList<E>(rows, MaoInterceptor.getPageRequest(), total);
                 doCache(ms, result, parameter, rowBounds);
                 return result;
             } else {
-                return new PageMyBatis<E>(rows);
+                return new PageArrayList<E>(rows);
             }
         } finally {
         	MaoInterceptor.clean();
@@ -87,11 +87,11 @@ public class MaoExecutor implements Executor {
         try {
         	if(interceptor){
         		if (total != 0) {
-        			final SeePaginationList<E> result = new SeePaginationList<E>(rows, MaoInterceptor.getPageRequest(), total);
+        			final PaginationList<E> result = new PaginationList<E>(rows, MaoInterceptor.getPageRequest(), total);
         			doCache(ms, result, parameter, rowBounds);
         			return result;
         		} else {
-        			return new SeePaginationList<E>(rows);
+        			return new PaginationList<E>(rows);
         		}
         	}
         	return rows;
@@ -109,7 +109,7 @@ public class MaoExecutor implements Executor {
      * @param rowBounds row bounds
      * @param <E>       paramter.
      */
-    private <E> void doCache(MappedStatement ms, PageMyBatis<E> result, Object parameter, RowBounds rowBounds) {
+    private <E> void doCache(MappedStatement ms, PageArrayList<E> result, Object parameter, RowBounds rowBounds) {
         // if the current of the executor is for CachingExecutor
         final Cache cache = ms.getCache();
         // Determine whether the current query cache.
