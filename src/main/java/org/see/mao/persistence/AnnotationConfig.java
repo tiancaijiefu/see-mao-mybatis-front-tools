@@ -14,7 +14,7 @@ import com.google.common.collect.Maps;
  * @author Joshua Wang
  * @date 2016年11月28日
  */
-public class MetaDataAnnotationConfig {
+public class AnnotationConfig {
 
 	/**
 	 * MetaData中Column注解对应的所有属性集合
